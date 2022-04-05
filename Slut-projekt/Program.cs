@@ -2,12 +2,18 @@
 using System;
 using Raylib_cs;
 
-//sonny likt spel ska jag kanske göra
-//göra så man kan klicka på fienderna och sig själv
-//göra runda då man kan attackera och så fienderna kan attackera
-//göra en timer som gör så att om man inte attackerar i den tiden så skippas din runda så fienderna attackerar
-//göra att fienderna attackerar bara då spelarens tur har gått
-//göra så man kan välja mellan flera attacker som gör olika saker
+//sonny likt spel 
+
+//fråga om man vill möta svår eller enkel fiende
+//timer som långsamt går ut 
+//kolla om musen är inom spelarens eller fiendens x och y kordinater
+//kolla om man trycker på vänster musknapp
+//om man trycker vänster musknapp på fiende eller spelare visa flera alternativ
+//kolla vilket alternativ man väljer och gör effekten för den man valde
+//när effekten har utspelats går timern till 0 oavsett hur mycket tid man hade.
+//fienden skadar dig när timer är slut och timer startar igen
+
+
 
 const int PLAYERSPAWNX = 100;
 const int PLAYERSPAWNY = 400;
