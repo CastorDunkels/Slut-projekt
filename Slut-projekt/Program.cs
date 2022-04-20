@@ -13,30 +13,58 @@ using Raylib_cs;
 //när effekten har utspelats går timern till 0 oavsett hur mycket tid man hade.
 //fienden skadar dig när timer är slut och timer startar igen
 
-
-
-const int PLAYERSPAWNX = 100;
-const int PLAYERSPAWNY = 400;
-const int PLAYERWIDTH = 100;
-const int PLAYERHEIGHT = 50;
-float enemyX = 800;
-float enemyY = 400;
-float enemyWidth = 100;
-float enemyHeight = 50;
-
-Rectangle playerRect = new Rectangle(PLAYERSPAWNX, PLAYERSPAWNY, PLAYERHEIGHT, PLAYERWIDTH);
-Rectangle enemyRect = new Rectangle(enemyX, enemyY, enemyHeight, enemyWidth);
-
 Raylib.InitWindow(1000, 900, "Game");
 Raylib.SetTargetFPS(60);
 
+const int PLAYERWIDTH = 50;
+const int PLAYERHEIGHT = 100;
+const int ENEMYWIDTH = 50;
+const int ENEMYHEIGHT = 100;
+float playerX = 100;
+float playerY = 400;
+float enemyX = 800;
+float enemyY = 400;
 
-while(Raylib.WindowShouldClose() == false){
 
-Raylib.BeginDrawing();
-Raylib.ClearBackground(Color.SKYBLUE);
-Raylib.DrawRectangleRec(playerRect, Color.GREEN);
-Raylib.DrawRectangleRec(enemyRect, Color.DARKPURPLE);
+Rectangle playerRect = new Rectangle(playerX, playerY, PLAYERWIDTH, PLAYERHEIGHT);
+Rectangle enemyRect = new Rectangle(enemyX, enemyY, ENEMYWIDTH, ENEMYHEIGHT);
 
-Raylib.EndDrawing();
+bool playerPress()
+{
+    float playerX2 = playerX + PLAYERWIDTH;
+    float playerY2 = playerY + PLAYERHEIGHT;
+    float mouseX = Raylib.GetMouseX();
+    float mouseY = Raylib.GetMouseY();
+    Raylib.DrawText(":" + playerX, 400, 100, 30, Color.BLACK);
+    Raylib.DrawText(":" + mouseX, 400, 600, 30, Color.BLACK);
+    Raylib.DrawText(":" + playerY, 100, 100, 30, Color.BLACK);
+    Raylib.DrawText(":" + mouseY, 100, 600, 30, Color.BLACK);
+    if (Raylib.IsMouseButtonDown(0) &&
+        playerX <= mouseX &&
+        playerX2 >= mouseX &&
+        playerY <= mouseY &&
+        playerY2 >= mouseY)
+    {
+        Raylib.DrawText("funnyhaha", 100, 100, 100, Color.BROWN);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
+}
+
+
+while (Raylib.WindowShouldClose() == false)
+{
+
+
+    Raylib.BeginDrawing();
+    Raylib.ClearBackground(Color.SKYBLUE);
+    playerPress();
+    Raylib.DrawRectangleRec(playerRect, Color.GREEN);
+    Raylib.DrawRectangleRec(enemyRect, Color.DARKPURPLE);
+
+    Raylib.EndDrawing();
 }
