@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.ComponentModel;
+using System.Data;
 using System.Collections.Generic;
 using System;
 using Raylib_cs;
@@ -27,6 +28,7 @@ float enemyX = 800;
 float enemyY = 400;
 double roundTime = 0;
 float playerHealth = 100;
+float enemyHealth = 1000;
 
 
 Rectangle playerRect = new Rectangle(playerX, playerY, PLAYERWIDTH, PLAYERHEIGHT);
@@ -80,25 +82,26 @@ bool enemyPress()
 }
 void enemyAttack()
 {
-    
+
     Random hitRate = new Random();
     int enemyHitRate = hitRate.Next(1, 11);//enemy has a 80% chance to deal dmg 
     Random rnd = new Random();
     int dmgTaken = rnd.Next(30, 51);
     if (enemyHitRate >= 9)
     {
-        Raylib.DrawText("Miss", (int)playerX + 60, (int)playerY, 20, Color.DARKGRAY);
+        Raylib.DrawText("Miss", (int)playerX + 60, (int)playerY, 30, Color.BLUE);
     }
     else
     {
         playerHealth -= dmgTaken;
+        Raylib.DrawText("-" + dmgTaken, (int)playerX + 60, (int)playerY, 30, Color.RED);
     }
 
 }
 
 void timer()
 {
-    if (Raylib.GetTime() - roundTime > 30)
+    if (Raylib.GetTime() - roundTime > 5)
     {
         enemyAttack();
         roundTime = Raylib.GetTime();
@@ -119,7 +122,13 @@ while (Raylib.WindowShouldClose() == false)
     enemyPress();
     Raylib.DrawRectangleRec(playerRect, Color.GREEN);
     Raylib.DrawRectangleRec(enemyRect, Color.DARKPURPLE);
-    Raylib.DrawText(":" + playerHealth, 100, 600, 30, Color.BLACK);
+    Raylib.DrawText(":" + playerHealth, (int)playerX, (int)playerY + 100, 30, Color.BLACK);
+    Raylib.DrawText("Time: " + ((int)Raylib.GetTime() - (int)roundTime), 450, 600, 30, Color.BLACK);
+    Raylib.DrawRectangle((int)playerX - 1, (int)playerY + 149, 102, 22, Color.BLACK);
+    Raylib.DrawRectangle((int)playerX, (int)playerY + 150, 100, 20, Color.WHITE);
+    Raylib.DrawRectangle((int)playerX + 2, (int)playerY + 151, (int)playerHealth * 96 / 100, 18, Color.RED);
+    Raylib.DrawRectangle((int)enemyX, (int)enemyY + 150, 100, 20, Color.BLACK);
+    Raylib.DrawRectangle((int)enemyX + 2, (int)enemyY + 151, (int)enemyHealth * 96 / 1000, 18, Color.RED);
 
     if (playerOptions == true)
     {
@@ -132,7 +141,8 @@ while (Raylib.WindowShouldClose() == false)
 
     }
 
-    if(playerHealth <=0){
+    if (playerHealth <= 0)
+    {
         playerHealth = 0;
 
 
