@@ -18,6 +18,12 @@ using Raylib_cs;
 Raylib.InitWindow(1000, 900, "Game");
 Raylib.SetTargetFPS(60);
 
+//information about the game. 
+//You have to either press yours or the enemys rectangle and choose an action to do. 
+//You are the rectangle on the left side of the screen. 
+//When you have chosen an action the enemy will try to dmg you. 
+//You will have 30 seconds per round to choose action and if you dont choose an action in time you will be attacked. 
+
 const int PLAYERWIDTH = 50;
 const int PLAYERHEIGHT = 100;
 const int ENEMYWIDTH = 50;
@@ -29,6 +35,12 @@ float enemyY = 400;
 double roundTime = 0;
 float playerHealth = 100;
 float enemyHealth = 1000;
+float enemyOptionX = enemyX + PLAYERWIDTH / 2;
+float enemyOptionY = enemyY - 20;
+float enemyOption2X = enemyOptionX - PLAYERWIDTH + 5;
+float enemyOption2Y = enemyOptionY + 40;
+float enemyOption3X = enemyOptionX + PLAYERWIDTH - 5;
+float enemyOption3Y = enemyOptionY + 40;
 
 
 Rectangle playerRect = new Rectangle(playerX, playerY, PLAYERWIDTH, PLAYERHEIGHT);
@@ -110,6 +122,24 @@ void timer()
     }
 }
 
+/*bool attackChoice() {
+    float mouseX = Raylib.GetMouseX();
+    float mouseY = Raylib.GetMouseY();
+    float dX = mouseX - enemyOptionX;
+    float dY = mouseY - enemyOptionY;
+    if(Raylib.IsMouseButtonPressed(0) && ){
+        return true;
+        Raylib.DrawText("JEFF", 500, 400, 40, Color.BLACK);
+    }
+    else{
+        return false;
+    }
+}*/
+
+//bool heal() {
+
+//}
+
 
 while (Raylib.WindowShouldClose() == false)
 {
@@ -120,26 +150,36 @@ while (Raylib.WindowShouldClose() == false)
     timer();
     playerPress();
     enemyPress();
+    //attackChoice();
     Raylib.DrawRectangleRec(playerRect, Color.GREEN);
     Raylib.DrawRectangleRec(enemyRect, Color.DARKPURPLE);
     Raylib.DrawText(":" + playerHealth, (int)playerX, (int)playerY + 100, 30, Color.BLACK);
     Raylib.DrawText("Time: " + ((int)Raylib.GetTime() - (int)roundTime), 450, 600, 30, Color.BLACK);
-    Raylib.DrawRectangle((int)playerX - 1, (int)playerY + 149, 102, 22, Color.BLACK);
-    Raylib.DrawRectangle((int)playerX, (int)playerY + 150, 100, 20, Color.WHITE);
+    Raylib.DrawRectangle((int)playerX, (int)playerY + 150, 100, 20, Color.BLACK);
+    Raylib.DrawRectangle((int)playerX + 2, (int)playerY + 151, 96, 18, Color.WHITE);
     Raylib.DrawRectangle((int)playerX + 2, (int)playerY + 151, (int)playerHealth * 96 / 100, 18, Color.RED);
     Raylib.DrawRectangle((int)enemyX, (int)enemyY + 150, 100, 20, Color.BLACK);
+    Raylib.DrawRectangle((int)enemyX + 2, (int)enemyY + 151, 96, 18, Color.BLACK);
     Raylib.DrawRectangle((int)enemyX + 2, (int)enemyY + 151, (int)enemyHealth * 96 / 1000, 18, Color.RED);
 
     if (playerOptions == true)
     {
         Raylib.DrawText("funnyhaha", 100, 100, 50, Color.BROWN);
     }
+    /*while (playerOptions == true){
+        heal();
+    }*/
+
     if (enemyOptions == true)
     {
         Raylib.DrawText("Jeffy", 600, 100, 50, Color.BROWN);
-        Raylib.DrawCircle((int)enemyX + 25, (int)enemyY - 23, 23, Color.BLUE);
-
+        Raylib.DrawCircle((int)enemyOptionX, (int)enemyOptionY, 18, Color.BLUE);
+        Raylib.DrawCircle((int)enemyOption2X, (int)enemyOption2Y, 18, Color.BLUE);
+        Raylib.DrawCircle((int)enemyOption3X, (int)enemyOption3Y, 18, Color.BLUE);
     }
+    /*while (enemyOptions == true){
+        attackChoice();
+    }*/
 
     if (playerHealth <= 0)
     {
