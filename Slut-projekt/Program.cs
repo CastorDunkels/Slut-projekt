@@ -56,6 +56,7 @@ float enemyHealthBarOutlineX = enemyX;
 float enemyHealthBarOutlineY = enemyY + 150;
 float enemyHealthBarX = enemyHealthBarOutlineX + 2;
 float enemyHealthBarY = enemyHealthBarOutlineY + 1;
+float enemyHeals = 0;
 
 
 Rectangle playerRect = new Rectangle(playerX, playerY, PLAYERWIDTH, PLAYERHEIGHT);
@@ -110,17 +111,15 @@ bool enemyPress()
 bool heal(){
     float mouseX = Raylib.GetMouseX();
     float mouseY = Raylib.GetMouseY();
-    float healX = 0;
-    float healY= 0;
-    float healX2 = healX + 100;
-    float healY2= healY + 100;
+    float playerHealX2 = playerHealX + 9;
+    float playerHealY2= playerHealY + 9;
     if (playerOptions == true){
 
         if (Raylib.IsMouseButtonPressed(0) &&
-            healX <= mouseX &&
-            healX2 >= mouseX &&
-            healY <= mouseY &&
-            healY2 >= mouseY)
+            playerHealX <= mouseX &&
+            playerHealX2 >= mouseX &&
+            playerHealY <= mouseY &&
+            playerHealY2 >= mouseY)
         {
             playerHealth += 50;
             roundTime -= 30;
@@ -137,17 +136,15 @@ bool heal(){
 bool weakAttack(){
     float mouseX = Raylib.GetMouseX();
     float mouseY = Raylib.GetMouseY();
-    float weakAttackX = enemyX;
-    float weakAttackY = 0;
-    float weakAttackX2 = weakAttackX + 100;
-    float weakAttackY2= weakAttackY + 100;
+    float enemyOption2X2 = enemyOption2X + 9;
+    float enemyOption2Y2= enemyOption2Y + 9;
     if (enemyOptions == true){
 
         if (Raylib.IsMouseButtonPressed(0) &&
-            weakAttackX <= mouseX &&
-            weakAttackX2 >= mouseX &&
-            weakAttackY <= mouseY &&
-            weakAttackY2 >= mouseY)
+            enemyOption2X <= mouseX &&
+            enemyOption2X2 >= mouseX &&
+            enemyOption2Y <= mouseY &&
+            enemyOption2Y2 >= mouseY)
         {
             enemyHealth -= 20;
             roundTime -= 30;
@@ -164,17 +161,15 @@ bool weakAttack(){
 bool mediumAttack(){
     float mouseX = Raylib.GetMouseX();
     float mouseY = Raylib.GetMouseY();
-    float medAttackX = enemyX;
-    float medAttackY = enemyY + 100;
-    float medAttackX2 = medAttackX + 100;
-    float medAttackY2= medAttackY + 100;
+    float enemyOptionX2 = enemyOptionX + 9;
+    float enemyOptionY2 = enemyOptionY + 9;
     if (enemyOptions == true){
 
         if (Raylib.IsMouseButtonPressed(0) &&
-            medAttackX <= mouseX &&
-            medAttackX2 >= mouseX &&
-            medAttackY <= mouseY &&
-            medAttackY2 >= mouseY)
+            enemyOptionX <= mouseX &&
+            enemyOptionX2 >= mouseX &&
+            enemyOptionY <= mouseY &&
+            enemyOptionY2 >= mouseY)
         {
             Random hitRate = new Random();
             int medAttackHitRate = hitRate.Next(1, 11);
@@ -182,8 +177,8 @@ bool mediumAttack(){
                 Raylib.DrawText("Miss",(int)enemyX - 60, (int)enemyY, 30, Color.RED);
             }
             else{
-            enemyHealth -= 100;
-            Raylib.DrawText("-" + 100, (int)enemyX - 60, (int)enemyY, 30, Color.BLUE);
+            enemyHealth -= 50;
+            Raylib.DrawText("-" + 50, (int)enemyX - 60, (int)enemyY, 30, Color.BLUE);
 
             }
             roundTime -= 30;
@@ -200,17 +195,15 @@ bool mediumAttack(){
 bool strongAttack(){
     float mouseX = Raylib.GetMouseX();
     float mouseY = Raylib.GetMouseY();
-    float strongAttackX = enemyX + 100;
-    float strongAttackY = enemyY + 100;
-    float strongAttackX2 = strongAttackX + 100;
-    float strongAttackY2= strongAttackY + 100;
+    float enemyOption3X2 = enemyOption3X + 100;
+    float enemyOption3Y2= enemyOption3Y + 100;
     if (enemyOptions == true){
 
         if (Raylib.IsMouseButtonPressed(0) &&
-            strongAttackX <= mouseX &&
-            strongAttackX2 >= mouseX &&
-            strongAttackY <= mouseY &&
-            strongAttackY2 >= mouseY)
+            enemyOption3X <= mouseX &&
+            enemyOption3X2 >= mouseX &&
+            enemyOption3Y <= mouseY &&
+            enemyOption3Y2 >= mouseY)
         {
             Random hitRate = new Random();
             int strongAttackHitRate = hitRate.Next(1, 101);
@@ -234,10 +227,9 @@ bool strongAttack(){
     }
 }
 void enemyHeal(){
-    float heals = 0;
-    if(enemyHealth <= 200 && heals == 0){
+    if(enemyHealth <= 200 && enemyHeals == 0){
         enemyHealth += 1000;
-        heals += 1;
+        enemyHeals += 1;
     }
 }
 void enemyAttack()
