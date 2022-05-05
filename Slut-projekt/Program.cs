@@ -33,6 +33,7 @@ float playerX = 100;
 float playerY = 400;
 float enemyX = 800;
 float enemyY = 400;
+//double textTime = 0;
 double roundTime = 0;
 float playerHealth = 100;
 float enemyHealth = 1000;
@@ -57,6 +58,7 @@ float enemyHealthBarOutlineY = enemyY + 150;
 float enemyHealthBarX = enemyHealthBarOutlineX + 2;
 float enemyHealthBarY = enemyHealthBarOutlineY + 1;
 float enemyHeals = 0;
+float radius = 18;
 
 
 Rectangle playerRect = new Rectangle(playerX, playerY, PLAYERWIDTH, PLAYERHEIGHT);
@@ -65,8 +67,20 @@ Rectangle enemyRect = new Rectangle(enemyX, enemyY, ENEMYWIDTH, ENEMYHEIGHT);
 bool playerOptions = false;
 bool enemyOptions = false;
 
+bool circleRadius(float x1, float y1, float x2, float y2, float radius){ //en metod för att kolla om något är innanför en cirkels radius 
+    float deltaX = x1 - x2;
+    float deltaY = y1 - y2;
+    float d2 = deltaX * deltaX + deltaY * deltaY;
+    if(d2 <= radius * radius){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
-bool playerPress()
+
+bool playerPress() //en metod som kollar om man trycker på vänstra mus knappen och om det är innanför spelarens rektangel  
 {
     float playerX2 = playerX + PLAYERWIDTH;
     float playerY2 = playerY + PLAYERHEIGHT;
@@ -87,7 +101,7 @@ bool playerPress()
     }
 
 }
-bool enemyPress()
+bool enemyPress() //samma som förra metoden men för fiendens rektangel
 {
     float enemyX2 = enemyX + ENEMYWIDTH;
     float enemyY2 = enemyY + ENEMYHEIGHT;
@@ -108,18 +122,12 @@ bool enemyPress()
     }
 
 }
-bool heal(){
+bool heal(){ //en metod som kollar om musen är inom en av cirklarnas radius och om man klickar på vänstra musknappen
     float mouseX = Raylib.GetMouseX();
     float mouseY = Raylib.GetMouseY();
-    float playerHealX2 = playerHealX + 9;
-    float playerHealY2= playerHealY + 9;
     if (playerOptions == true){
 
-        if (Raylib.IsMouseButtonPressed(0) &&
-            playerHealX <= mouseX &&
-            playerHealX2 >= mouseX &&
-            playerHealY <= mouseY &&
-            playerHealY2 >= mouseY)
+        if (Raylib.IsMouseButtonPressed(0) && circleRadius(mouseX, mouseY, playerHealX, playerHealY, radius))
         {
             playerHealth += 50;
             roundTime -= 30;
@@ -133,18 +141,12 @@ bool heal(){
         return false;
     }
 }
-bool weakAttack(){
+bool weakAttack(){ //samma som förra
     float mouseX = Raylib.GetMouseX();
     float mouseY = Raylib.GetMouseY();
-    float enemyOption2X2 = enemyOption2X + 9;
-    float enemyOption2Y2= enemyOption2Y + 9;
     if (enemyOptions == true){
 
-        if (Raylib.IsMouseButtonPressed(0) &&
-            enemyOption2X <= mouseX &&
-            enemyOption2X2 >= mouseX &&
-            enemyOption2Y <= mouseY &&
-            enemyOption2Y2 >= mouseY)
+        if (Raylib.IsMouseButtonPressed(0) && circleRadius(mouseX, mouseY, enemyOption2X, enemyOption2Y, radius))
         {
             enemyHealth -= 20;
             roundTime -= 30;
@@ -158,18 +160,12 @@ bool weakAttack(){
         return false;
     }
 }
-bool mediumAttack(){
+bool mediumAttack(){ //samma som förra men att det finns en chans att missa
     float mouseX = Raylib.GetMouseX();
     float mouseY = Raylib.GetMouseY();
-    float enemyOptionX2 = enemyOptionX + 9;
-    float enemyOptionY2 = enemyOptionY + 9;
     if (enemyOptions == true){
 
-        if (Raylib.IsMouseButtonPressed(0) &&
-            enemyOptionX <= mouseX &&
-            enemyOptionX2 >= mouseX &&
-            enemyOptionY <= mouseY &&
-            enemyOptionY2 >= mouseY)
+        if (Raylib.IsMouseButtonPressed(0) && circleRadius(mouseX, mouseY, enemyOptionX, enemyOptionY, radius))
         {
             Random hitRate = new Random();
             int medAttackHitRate = hitRate.Next(1, 11);
@@ -192,28 +188,21 @@ bool mediumAttack(){
         return false;
     }
 }
-bool strongAttack(){
+bool strongAttack(){ //samma som förra men med en ännu större chans att missa
     float mouseX = Raylib.GetMouseX();
     float mouseY = Raylib.GetMouseY();
-    float enemyOption3X2 = enemyOption3X + 100;
-    float enemyOption3Y2= enemyOption3Y + 100;
     if (enemyOptions == true){
 
-        if (Raylib.IsMouseButtonPressed(0) &&
-            enemyOption3X <= mouseX &&
-            enemyOption3X2 >= mouseX &&
-            enemyOption3Y <= mouseY &&
-            enemyOption3Y2 >= mouseY)
+        if (Raylib.IsMouseButtonPressed(0) && circleRadius(mouseX, mouseY, enemyOption3X, enemyOption3Y, radius))
         {
             Random hitRate = new Random();
             int strongAttackHitRate = hitRate.Next(1, 101);
             if(strongAttackHitRate >= 2){
-                Raylib.DrawText("Miss",(int)enemyX - 60, (int)enemyY, 30, Color.RED);
+                    Raylib.DrawText("Miss",(int)enemyX - 60, (int)enemyY, 30, Color.RED);
             }
             else{
-            enemyHealth -= 1000;
-            Raylib.DrawText("-" + 1000, (int)enemyX - 60, (int)enemyY, 30, Color.BLUE);
-
+                enemyHealth -= 1000;
+                    Raylib.DrawText("-" + 1000, (int)enemyX - 60, (int)enemyY, 30, Color.BLUE);
             }
             roundTime -= 30;
             return true;
@@ -226,19 +215,19 @@ bool strongAttack(){
         return false;
     }
 }
-void enemyHeal(){
+void enemyHeal(){ //en metod som gör så att när fiendens hp blir 200 eller mindre så går det tillbaka till 1000 bara en gång
     if(enemyHealth <= 200 && enemyHeals == 0){
         enemyHealth += 1000;
         enemyHeals += 1;
     }
 }
-void enemyAttack()
+void enemyAttack() //en metod som gör så fienden attackerar då timern är slut och då den har 80% chans att skada 
 {
 
     Random hitRate = new Random();
-    int enemyHitRate = hitRate.Next(1, 11);//enemy has a 80% chance to deal dmg 
+    int enemyHitRate = hitRate.Next(1, 11);
     Random rnd = new Random();
-    int dmgTaken = rnd.Next(30, 51);
+    int dmgTaken = rnd.Next(10, 31);
     if (enemyHitRate >= 9)
     {
         Raylib.DrawText("Miss", (int)playerX + 60, (int)playerY, 30, Color.BLUE);
@@ -251,7 +240,7 @@ void enemyAttack()
 
 }
 
-void timer()
+void timer() //en metod som är en timer som räknar upp och startar om då den nått 30
 {
     if (Raylib.GetTime() - roundTime > 30)
     {
@@ -281,7 +270,7 @@ while (Raylib.WindowShouldClose() == false)
     enemyHeal();
     Raylib.DrawRectangleRec(playerRect, Color.GREEN);
     Raylib.DrawRectangleRec(enemyRect, Color.DARKPURPLE);
-    Raylib.DrawText(":" + playerHealth, (int)playerHealthX, (int)playerHealthY, 30, Color.BLACK);
+    Raylib.DrawText(":" + playerHealth, (int)playerHealthX, (int)playerHealthY, 30, Color.BLACK); //ritar ut healthbars
     Raylib.DrawText(":" + enemyHealth, (int)enemyHealthX, (int)enemyHealthY, 30, Color.BLACK);
     Raylib.DrawText("Time: " + ((int)Raylib.GetTime() - (int)roundTime), 450, 600, 30, Color.BLACK);
     Raylib.DrawRectangle((int)playerHealthBarOutlineX, (int)playerHealthBarOutlineY, 100, 20, Color.BLACK);
@@ -291,33 +280,33 @@ while (Raylib.WindowShouldClose() == false)
     Raylib.DrawRectangle((int)enemyHealthBarX, (int)enemyHealthBarY, 96, 18, Color.BLACK);
     Raylib.DrawRectangle((int)enemyHealthBarX, (int)enemyHealthBarY, (int)enemyHealth * 96 / 1000, 18, Color.RED);
 
-    if (playerOptions == true)
+    if (playerOptions == true) //ritar ut cirkeln som används för att heala
     {
         Raylib.DrawText("funnyhaha", 100, 100, 50, Color.BROWN);
-        Raylib.DrawCircle((int)playerHealX, (int)playerHealY, 18, Color.BLUE);
+        Raylib.DrawCircle((int)playerHealX, (int)playerHealY, radius, Color.BLUE);
     }
 
-    if (enemyOptions == true)
+    if (enemyOptions == true) //samma som förra men för attack cirklarna
     {
         Raylib.DrawText("Jeffy", 600, 100, 50, Color.BROWN);
-        Raylib.DrawCircle((int)enemyOptionX, (int)enemyOptionY, 18, Color.BLUE);
-        Raylib.DrawCircle((int)enemyOption2X, (int)enemyOption2Y, 18, Color.BLUE);
-        Raylib.DrawCircle((int)enemyOption3X, (int)enemyOption3Y, 18, Color.BLUE);
+        Raylib.DrawCircle((int)enemyOptionX, (int)enemyOptionY, radius, Color.BLUE);
+        Raylib.DrawCircle((int)enemyOption2X, (int)enemyOption2Y, radius, Color.BLUE);
+        Raylib.DrawCircle((int)enemyOption3X, (int)enemyOption3Y, radius, Color.BLUE);
     }
 
-    if (playerHealth <= 0)
+    if (playerHealth <= 0) //gör så att hp inte går ner under 0
     {
         playerHealth = 0;
 
 
     }
-    if (playerHealth >= 101){
+    if (playerHealth >= 101){ //gör så att hp inte går över 100
         playerHealth = 100;
     }
-    if (enemyHealth <=0){
+    if (enemyHealth <=0){ //gör så att hp inte går under 0
         enemyHealth = 0;
     }
-    if (enemyHealth >= 1001){
+    if (enemyHealth >= 1001){ //gör så att hp inte går över 1000
         enemyHealth = 1000;
     }
 
